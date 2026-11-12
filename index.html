@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SADAR — Sarana Edukasi dan Deteksi Anti Narkoba</title>
+    <meta name="description"
+        content="SADAR (Sarana Edukasi dan Deteksi Anti Narkoba) — Platform edukasi dan informasi pencegahan penyalahgunaan narkotika untuk pelajar dan masyarakat. Proyek PjBL kelas XI RPL.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Comfortaa:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="tooplate-mochi-space.css">
+    <link rel="stylesheet" href="sadar-custom.css">
+</head>
+
+<body>
+    <!-- Floating Background Shapes -->
+    <div class="floating-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="shape shape-4"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#beranda" class="logo" title="SADAR — Sarana Edukasi dan Deteksi Anti Narkoba">
+                <div class="logo-blob"></div>
+                <span class="logo-text">SADAR</span>
+                <span class="logo-badge">P4GN</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#beranda">Beranda</a></li>
+                <li><a href="#edukasi">Edukasi</a></li>
+                <li><a href="#langkah">Pencegahan</a></li>
+                <li><a href="#tanya-ai">Tanya AI</a></li>
+                <li><a href="#kuis">Kuis</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <!-- Auth Buttons (Tampil saat Guest) -->
+                <div class="nav-auth-group" id="navAuthGroup">
+                    <button type="button" class="btn-auth btn-auth-login" id="btnOpenLogin">
+                        <span>🔑</span> Masuk
+                    </button>
+                    <button type="button" class="btn-auth btn-auth-register" id="btnOpenRegister">
+                        <span>✨</span> Daftar
+                    </button>
+                </div>
+
+                <!-- User Profile (Tampil saat Login) -->
+                <div class="nav-user-group" id="navUserGroup" style="display: none;">
+                    <div class="user-pill" id="navUserPill" title="Akun Pelajar Aktif">
+                        <span class="user-avatar" id="navUserAvatar">👤</span>
+                        <span class="user-name" id="navUserName">Pengguna</span>
+                    </div>
+                    <button type="button" class="btn-auth btn-auth-logout" id="btnLogout" title="Keluar dari akun">
+                        <span>🚪</span> Keluar
+                    </button>
+                </div>
+
+                <a href="tel:184" class="nav-cta" title="Call Center BNN 184 (Layanan Bebas Pulsa 24 Jam)">
+                    <span class="hotline-pulse" aria-hidden="true"></span>
+                    <span class="cta-icon">📞</span>
+                    <span class="cta-text">BNN 184</span>
+                </a>
+
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Buka Menu Navigasi" type="button">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileOverlay"></div>
+
+    <!-- Mobile Menu Panel -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <div class="logo">
+                <div class="logo-blob"></div>
+                <span class="logo-text">SADAR</span>
+                <span class="logo-badge">P4GN</span>
+            </div>
+            <button class="mobile-close-btn" id="mobileCloseBtn" aria-label="Tutup Menu" type="button">✕</button>
+        </div>
+
+        <!-- Mobile User & Auth Bar -->
+        <div class="mobile-auth-box">
+            <div id="mobileAuthGuest" class="mobile-auth-group">
+                <button type="button" class="mobile-btn-auth mobile-btn-login" id="mBtnOpenLogin">
+                    <span>🔑</span> Masuk Akun
+                </button>
+                <button type="button" class="mobile-btn-auth mobile-btn-register" id="mBtnOpenRegister">
+                    <span>✨</span> Daftar Akun
+                </button>
+            </div>
+            <div id="mobileAuthUser" class="mobile-auth-user" style="display: none;">
+                <div class="mobile-user-card">
+                    <div class="m-user-avatar" id="mUserAvatar">👤</div>
+                    <div class="m-user-info">
+                        <strong id="mUserName">Nama Pengguna</strong>
+                        <span>🟢 Pelajar Terdaftar</span>
+                    </div>
+                </div>
+                <button type="button" class="mobile-btn-logout" id="mBtnLogout">
+                    <span>🚪</span> Keluar
+                </button>
+            </div>
+        </div>
+
+        <ul class="mobile-menu-links">
+            <li><a href="#beranda"><span class="m-icon">🏠</span> Beranda</a></li>
+            <li><a href="#edukasi"><span class="m-icon">📚</span> Edukasi P4GN</a></li>
+            <li><a href="#langkah"><span class="m-icon">🛡️</span> Langkah Pencegahan</a></li>
+            <li><a href="#tanya-ai"><span class="m-icon">💬</span> Tanya Sahabat AI</a></li>
+            <li><a href="#kuis"><span class="m-icon">🎯</span> Kuis SADAR</a></li>
+        </ul>
+        <div class="mobile-menu-footer">
+            <a href="tel:184" class="mobile-menu-cta">
+                <span class="hotline-pulse" aria-hidden="true"></span>
+                📞 Call Center BNN 184
+            </a>
+            <p class="mobile-menu-desc">Layanan darurat bebas pulsa BNN untuk konsultasi & rehabilitasi narkoba.</p>
+        </div>
+    </div>
+
+    <!-- Hero Section / Beranda -->
+    <section class="hero" id="beranda">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">
+                    <span class="sparkle">✨</span>
+                    Program Pencegahan · P4GN
+                </div>
+                <h1>Ruang Aman untuk <span>Belajar, Berbagi,</span> dan Pulih</h1>
+                <p><strong>SADAR (Sarana Edukasi dan Deteksi Anti Narkoba)</strong> adalah platform edukasi dan
+                    informasi pencegahan penyalahgunaan narkotika yang dirancang untuk pelajar dan masyarakat. Di sini
+                    kamu bisa belajar dari sumber resmi BNN & Kemkes tanpa rasa dihakimi.</p>
+                <div class="hero-buttons">
+                    <a href="#edukasi" class="btn btn-primary">
+                        <span>📚</span> Jelajahi Edukasi
+                    </a>
+                    <a href="#tanya-ai" class="btn btn-secondary">
+                        <span>💬</span> Tanya Sahabat AI
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <!-- Mochi Mascot -->
+                <div class="mochi mochi-main" title="Klik aku untuk senyum!">
+                    <span class="mochi-sparkle">✨</span>
+                    <span class="mochi-sparkle">⭐</span>
+                    <span class="mochi-sparkle">💖</span>
+                    <div class="mochi-body">
+                        <div class="mochi-face">
+                            <div class="mochi-eye"></div>
+                            <div class="mochi-eye"></div>
+                        </div>
+                        <div class="mochi-blush left"></div>
+                        <div class="mochi-blush right"></div>
+                        <div class="mochi-mouth"></div>
+                    </div>
+                </div>
+
+                <!-- Phone Mockup (Interactive Health & Mind Check-in) -->
+                <div class="phone-mockup">
+                    <div class="phone-screen">
+                        <div class="phone-content">
+                            <div class="phone-clock-wrapper">
+                                <div class="phone-clock" id="phoneClock">
+                                    <span class="clock-time">00:00</span><span class="clock-seconds">:00</span>
+                                    <span class="clock-ampm"></span>
+                                </div>
+                                <button class="clock-toggle" id="clockToggle">24h</button>
+                            </div>
+                            <div class="phone-greeting" id="phoneGreeting">Halo Sobat SADAR! 🌸</div>
+                            <div class="phone-mood-label">Bagaimana perasaanmu hari ini?</div>
+                            <div class="phone-moods">
+                                <div class="mood-btn" title="Semangat">😊</div>
+                                <div class="mood-btn active" title="Tenang & Bahagia">🥰</div>
+                                <div class="mood-btn" title="Butuh Teman Bicara">😌</div>
+                                <div class="mood-btn" title="Sedang Cemas / Lelah">😔</div>
+                            </div>
+                            <div class="phone-card">
+                                <div class="phone-card-title">🌿 Ruang Aman & Bebas Narkoba</div>
+                                <p style="font-size:0.8rem; color:#8B7878; margin-top:6px; line-height:1.4;">Jaga
+                                    pikiran tetap jernih dan tubuh sehat. Bersama kita tolak narkoba!</p>
+                            </div>
+                        </div>
+                        <div class="phone-nav">
+                            <a href="#beranda" class="phone-nav-item active" style="text-decoration:none;">🏠</a>
+                            <a href="#edukasi" class="phone-nav-item" style="text-decoration:none;">📚</a>
+                            <a href="#tanya-ai" class="phone-nav-item" style="text-decoration:none;">💬</a>
+                            <a href="#kuis" class="phone-nav-item" style="text-decoration:none;">🎯</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Floating Elements -->
+                <div class="float-element float-heart">💖</div>
+                <div class="float-element float-star">⭐</div>
+                <div class="float-element float-cloud">🛡️</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section / Materi Edukasi P4GN -->
+    <section class="features" id="edukasi">
+        <div class="section-header reveal">
+            <div class="section-badge">
+                <span>📚</span> Edukasi Resmi BNN & Kemkes
+            </div>
+            <h2>Artikel & Materi Edukasi P4GN</h2>
+            <p>Pelajari dasar-dasar pencegahan penyalahgunaan narkotika dari sumber terpercaya untuk membentengi diri
+                dan keluarga.</p>
+        </div>
+        <div class="features-grid">
+            <!-- Card 1 -->
+            <div class="feature-card reveal">
+                <div class="feature-image">
+                    <div class="feature-image-inner">
+                        <div class="feature-screenshot mood-screenshot" style="background:#FFF0F0;">
+                            <div class="mood-screenshot-title" style="font-size:1.1rem;">📚 Narkotika</div>
+                            <div style="font-size:2.8rem; margin:12px 0;">🧠</div>
+                            <p style="font-size:0.78rem; color:#8B7878; padding:0 8px;">Zat yang memengaruhi sistem
+                                saraf pusat</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-content">
+                    <h3><span>📚</span> Mengenal Narkotika</h3>
+                    <p>Narkotika, Psikotropika, dan Zat Adiktif (NAPZA) dapat memengaruhi kerja otak dan emosi. Kenali
+                        jenisnya dan mengapa penolakan sejak dini sangat penting.</p>
+                    <span class="feature-tag">🏛️ Sumber: BNN.go.id</span>
+                    <div>
+                        <button type="button" class="btn-card-read" onclick="bukaArtikel('art-1')">Baca Selengkapnya
+                            ➜</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="feature-card reveal">
+                <div class="feature-image">
+                    <div class="feature-image-inner">
+                        <div class="feature-screenshot breathing-screenshot" style="background:#F0F8FF;">
+                            <div class="breathing-screenshot-text" style="font-size:1rem; font-weight:700;">🫀 Kesehatan
+                            </div>
+                            <div style="font-size:2.8rem; margin:10px 0;">⚡</div>
+                            <div class="breathing-screenshot-timer" style="font-size:0.75rem;">Lindungi Otak & Tubuh
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-content">
+                    <h3><span>🫀</span> Dampak bagi Kesehatan & Sosial</h3>
+                    <p>Dampak buruk bagi fungsi otak, daya ingat, organ tubuh, serta rusaknya hubungan pertemanan,
+                        keharmonisan keluarga, dan masa depan.</p>
+                    <span class="feature-tag">🏥 Rujukan: Kemenkes RI</span>
+                    <div>
+                        <button type="button" class="btn-card-read" onclick="bukaArtikel('art-2')">Baca Selengkapnya
+                            ➜</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="feature-card reveal">
+                <div class="feature-image">
+                    <div class="feature-image-inner">
+                        <div class="feature-screenshot journal-screenshot" style="background:#F2FAF5;">
+                            <div class="journal-screenshot-header">
+                                <div class="journal-screenshot-date">Sekolah Aman</div>
+                                <div class="journal-screenshot-mood">🛡️</div>
+                            </div>
+                            <div class="journal-screenshot-card">
+                                <div class="journal-screenshot-label">Pencegahan Aktif</div>
+                                <div class="journal-screenshot-line" style="background:#A9C4B0;"></div>
+                                <div class="journal-screenshot-line" style="background:#A9C4B0;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-content">
+                    <h3><span>🛡️</span> Pencegahan di Lingkungan Sekolah</h3>
+                    <p>Pencegahan paling efektif dimulai dari lingkungan terdekat: sekolah yang informatif, pertemanan
+                        yang saling menguatkan, dan keluarga yang terbuka.</p>
+                    <span class="feature-tag">🤝 P4GN Berbasis Komunitas</span>
+                    <div>
+                        <button type="button" class="btn-card-read" onclick="bukaArtikel('art-3')">Baca Selengkapnya
+                            ➜</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="feature-card reveal">
+                <div class="feature-image">
+                    <div class="feature-image-inner">
+                        <div class="feature-screenshot sleep-screenshot" style="background:#FFF9EB;">
+                            <div class="sleep-screenshot-icon">🤝</div>
+                            <div class="sleep-screenshot-title" style="font-size:0.9rem;">Peduli Sahabat</div>
+                            <p style="font-size:0.75rem; color:#8B7878; margin-top:8px;">Dukung tanpa menghakimi</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-content">
+                    <h3><span>🤝</span> Menolong Sahabat yang Terpengaruh</h3>
+                    <p>Ketahui tanda perubahan awal tanpa kepanikan. Berikan dukungan moral secara empatik dan arahkan
+                        ke konselor BK atau pihak profesional medis.</p>
+                    <span class="feature-tag">❤️ Empati & Pendampingan</span>
+                    <div>
+                        <button type="button" class="btn-card-read" onclick="bukaArtikel('art-4')">Baca Selengkapnya
+                            ➜</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="feature-card reveal">
+                <div class="feature-image">
+                    <div class="feature-image-inner">
+                        <div class="feature-screenshot affirmations-screenshot" style="background:#F6F0FA;">
+                            <div class="affirmations-icon">⚖️</div>
+                            <div class="affirmations-card" style="padding:10px;">
+                                <div class="affirmations-text" style="font-size:0.78rem;">"Pecandu berhak pulih melalui
+                                    rehabilitasi medis."</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-content">
+                    <h3><span>⚖️</span> Hak Rehabilitasi Korban</h3>
+                    <p>Sesuai UU No. 35 Tahun 2009, korban penyalahgunaan berhak direhabilitasi secara medis dan sosial.
+                        Pendekatan kita adalah pemulihan, bukan stigma negatif.</p>
+                    <span class="feature-tag">📜 UU No. 35 Tahun 2009</span>
+                    <div>
+                        <button type="button" class="btn-card-read" onclick="bukaArtikel('art-5')">Baca Selengkapnya
+                            ➜</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="feature-card reveal">
+                <div class="feature-image">
+                    <div class="feature-image-inner">
+                        <div class="feature-screenshot habits-screenshot" style="background:#FFF3E8;">
+                            <div class="habits-title" style="font-size:0.9rem;">📞 Bantuan Resmi</div>
+                            <div class="habits-list" style="margin-top:8px;">
+                                <div class="habit-item" style="padding:4px 8px; font-size:0.75rem;">
+                                    <div class="habit-check done">✓</div>
+                                    <span>Call Center 184</span>
+                                </div>
+                                <div class="habit-item" style="padding:4px 8px; font-size:0.75rem;">
+                                    <div class="habit-check done">✓</div>
+                                    <span>Halo Kemkes</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-content">
+                    <h3><span>📞</span> Layanan Bantuan & Konseling</h3>
+                    <p>Dapatkan nomor-nomor darurat resmi, hotline bebas pulsa, serta panduan mencari tempat
+                        berkonsultasi secara aman dengan jaminan kerahasiaan penuh.</p>
+                    <span class="feature-tag">🔒 100% Rahasia & Aman</span>
+                    <div>
+                        <button type="button" class="btn-card-read" onclick="bukaArtikel('art-6')">Baca Selengkapnya
+                            ➜</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works / 3 Langkah Pencegahan -->
+    <section class="how-it-works" id="langkah">
+        <div class="section-header reveal">
+            <div class="section-badge">
+                <span>🎯</span> Panduan Aksi Nyata
+            </div>
+            <h2>3 Langkah Nyata Melindungi Diri & Sahabat</h2>
+            <p>Langkah konkret dan mudah diterapkan setiap hari oleh pelajar untuk menciptakan lingkungan pergaulan yang
+                sehat.</p>
+        </div>
+        <div class="steps">
+            <div class="step reveal">
+                <div class="step-number">1</div>
+                <h3>Pahami Faktanya</h3>
+                <p>Cari informasi dari sumber terpercaya seperti BNN dan Kemkes RI. Jangan mudah termakan mitos
+                    coba-coba atau anggapan keliru bahwa zat adiktif menyelesaikan masalah.</p>
+            </div>
+            <div class="step reveal">
+                <div class="step-number">2</div>
+                <h3>Berani Berkata "TIDAK"</h3>
+                <p>Asah keterampilan asertif untuk menolak tegas segala bujukan berbahaya. Teman sejati akan menghargai
+                    prinsip hidup sehatmu dan tidak akan memaksamu.</p>
+            </div>
+            <div class="step reveal">
+                <div class="step-number">3</div>
+                <h3>Rangkul & Cari Pertolongan</h3>
+                <p>Jika melihat sahabatmu mulai terjerumus, jangan jauhi atau permalukan. Bicaralah secara empatik dan
+                    dampingi mereka untuk berkonsultasi ke Guru BK atau hotline resmi.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tanya Sahabat AI (Gemini AI Feature) -->
+    <section class="chat-section" id="tanya-ai">
+        <div class="section-header reveal">
+            <div class="section-badge">
+                <span>🤖</span> Didukung Google Gemini AI
+            </div>
+            <h2>Tanya Sahabat AI SADAR ✨</h2>
+            <p>Punya pertanyaan seputar bahaya narkotika, hukum P4GN, tips menolak ajakan zat berbahaya, atau kesehatan
+                mental? Tanyakan langsung secara bebas dan aman!</p>
+        </div>
+
+        <div class="chat-container reveal">
+            <div class="chat-header">
+                <div class="chat-header-info">
+                    <div class="chat-avatar">🍡</div>
+                    <div class="chat-title-box">
+                        <h3>Sahabat AI SADAR</h3>
+                        <div class="chat-status">
+                            <span class="chat-status-dot"></span>
+                            Online · Siap Membantu Pelajar
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-header-actions">
+                    <span class="chat-db-badge" title="Riwayat percakapan otomatis tersimpan di database">
+                        <span class="db-dot"></span> 💾 Database Aktif
+                    </span>
+                    <button type="button" class="btn-clear-chat" id="btnClearChat"
+                        title="Hapus seluruh riwayat obrolan akun ini">
+                        🗑️ Hapus Riwayat
+                    </button>
+                    <button type="button" class="btn-clear-chat" id="btnConfigApiKey"
+                        title="Pengaturan Kunci Gemini AI">
+                        ⚙️ API Key
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quick Question Chips -->
+            <div class="chat-chips-wrapper">
+                <div class="chat-chips-label">Pertanyaan Cepat:</div>
+                <div class="chat-chips">
+                    <button type="button" class="chat-chip" onclick="askQuestion('Apa itu P4GN dan tujuannya?')">
+                        💡 Apa itu P4GN?
+                    </button>
+                    <button type="button" class="chat-chip"
+                        onclick="askQuestion('Bagaimana cara tegas menolak ajakan narkoba?')">
+                        🛡️ Cara Menolak Ajakan
+                    </button>
+                    <button type="button" class="chat-chip"
+                        onclick="askQuestion('Apa tanda teman yang butuh pertolongan dan bagaimana cara membantunya?')">
+                        🤝 Cara Menolong Sahabat
+                    </button>
+                    <button type="button" class="chat-chip"
+                        onclick="askQuestion('Bagaimana hak rehabilitasi bagi pengguna narkotika menurut undang-undang?')">
+                        ⚖️ Hak Rehabilitasi (UU 35/2009)
+                    </button>
+                    <button type="button" class="chat-chip"
+                        onclick="askQuestion('Berapa nomor darurat hotline resmi BNN jika butuh bantuan?')">
+                        📞 Kontak Darurat BNN
+                    </button>
+                </div>
+            </div>
+
+            <!-- Messages Window -->
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat-msg bot">
+                    <div class="chat-msg-avatar">🍡</div>
+                    <div class="chat-msg-bubble">
+                        <p>Halo! Aku <strong>Sahabat AI SADAR</strong> 🍡. Senang sekali bisa menemanimu di sini.</p>
+                        <p>Aku siap membantumu berdiskusi tentang edukasi bahaya narkotika, program pencegahan P4GN,
+                            cara menjaga kesehatan mental, hingga langkah mencari pertolongan resmi tanpa stigma.
+                            Silakan tanyakan apa saja ya!</p>
+                        <span class="chat-msg-time">Sekarang</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Bar -->
+            <div class="chat-input-bar">
+                <input type="text" class="chat-input" id="chatInput"
+                    placeholder="Ketik pertanyaanmu di sini (contoh: Apa dampak narkoba bagi remaja?)..."
+                    autocomplete="off">
+                <button type="button" class="chat-send-btn" id="chatSendBtn" title="Kirim Pertanyaan">
+                    ➤
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Kuis Interaktif SADAR -->
+    <section class="kuis-section" id="kuis">
+        <div class="section-header reveal">
+            <div class="section-badge">
+                <span>🎮</span> Uji Pemahamanmu
+            </div>
+            <h2>Kuis Interaktif SADAR</h2>
+            <p>Uji wawasanmu seputar bahaya narkoba, fakta penting P4GN, dan cara pencegahan sejak dini. Pilih jawaban
+                yang paling tepat!</p>
+        </div>
+
+        <div class="kuis-box reveal">
+            <div id="kuisContentBox">
+                <div class="kuis-header-meta">
+                    <span id="kuisNumber">Pertanyaan 1 dari 5</span>
+                    <span class="kuis-score-badge" id="kuisScoreLive">Skor: 0</span>
+                </div>
+                <div class="kuis-progress">
+                    <div class="kuis-progress-bar" id="kuisProgressBar"></div>
+                </div>
+
+                <h3 class="kuis-question" id="kuisQuestion"></h3>
+                <div class="kuis-options" id="kuisOptions"></div>
+                <div class="kuis-feedback-box" id="kuisFeedback"></div>
+
+                <div class="kuis-actions">
+                    <button type="button" id="kuisNextBtn" class="btn btn-primary"
+                        style="display:none; padding:12px 28px;">
+                        Lanjut ➜
+                    </button>
+                </div>
+            </div>
+
+            <!-- Hasil Kuis -->
+            <div class="kuis-result-box" id="kuisResultBox">
+                <div class="kuis-circle-score" id="kuisFinalScore">0/5</div>
+                <h3 id="kuisFinalTitle" style="font-size:1.5rem; color:#6B5252; margin-bottom:8px;">Bagus Sekali!</h3>
+                <p id="kuisFinalMsg" style="color:#8B7878; max-width:500px; margin:0 auto 24px; line-height:1.6;"></p>
+                <button type="button" id="kuisRestartBtn" class="btn btn-primary">
+                    🔄 Coba Kuis Lagi
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials / Suara Komunitas -->
+    <section class="testimonials" id="testimoni">
+        <div class="section-header reveal">
+            <div class="section-badge">
+                <span>💬</span> Pengalaman Komunitas
+            </div>
+            <h2>Apa Kata Mereka Tentang SADAR</h2>
+            <p>Suara pelajar dan pendidik dalam menciptakan lingkungan sekolah yang bersih, sehat, dan berprestasi tanpa
+                zat berbahaya.</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card reveal">
+                <div class="testimonial-avatar">👩‍🎓</div>
+                <p class="testimonial-text">"Platform SADAR sangat ramah untuk pelajar. Penjelasannya tidak
+                    menakut-nakuti dan fitur Tanya Sahabat AI-nya sangat membantu kami memahami fakta nyata tanpa rasa
+                    malu!"</p>
+                <div class="testimonial-author">Sarah K.</div>
+                <div class="testimonial-role">Siswi Kelas XI RPL</div>
+            </div>
+            <div class="testimonial-card reveal">
+                <div class="testimonial-avatar">👨‍🏫</div>
+                <p class="testimonial-text">"Sebagai guru BK, materi P4GN dan edukasi hak rehabilitasi di SADAR sangat
+                    komprehensif. Menjadi media yang tepat bagi kami untuk mengedukasi siswa secara empatik."</p>
+                <div class="testimonial-author">Bpk. Haryanto, S.Pd.</div>
+                <div class="testimonial-role">Guru Bimbingan Konseling (BK)</div>
+            </div>
+            <div class="testimonial-card reveal">
+                <div class="testimonial-avatar">🧑‍💻</div>
+                <p class="testimonial-text">"Membuka mata kita semua bahwa teman yang terjerumus adalah korban yang
+                    harus dirangkul dan dibantu untuk pulih, bukan dijauhi atau distigma."</p>
+                <div class="testimonial-author">Rizky Pratama</div>
+                <div class="testimonial-role">Pelajar & Pengurus OSIS</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hotline & Bantuan Darurat CTA -->
+    <section class="download-cta" id="bantuan">
+        <div class="cta-content reveal">
+            <div class="cta-mochi">
+                <div class="cta-mochi-mouth"></div>
+                <div class="cta-mochi-blush left"></div>
+                <div class="cta-mochi-blush right"></div>
+                <div class="cta-mochi-hand"></div>
+            </div>
+            <h2>Butuh Bantuan Segera?</h2>
+            <p>Jangan merasa sendirian. Hubungi layanan resmi bebas pulsa dengan jaminan kerahasiaan penuh untuk
+                konsultasi dan informasi rehabilitasi medis.</p>
+
+            <div class="hotline-banner">
+                <a href="tel:184" class="hotline-card">
+                    <span class="hotline-icon">📞</span>
+                    <div class="hotline-info">
+                        <strong>Call Center BNN: 184</strong>
+                        <span>Layanan Konseling & Lapor BNN RI (Bebas Pulsa)</span>
+                    </div>
+                </a>
+                <a href="tel:1500567" class="hotline-card">
+                    <span class="hotline-icon">🏥</span>
+                    <div class="hotline-info">
+                        <strong>Halo Kemkes: 1500-567</strong>
+                        <span>Layanan Konsultasi Kesehatan & Mental Kemenkes RI</span>
+                    </div>
+                </a>
+                <a href="https://bnn.go.id" target="_blank" rel="noopener noreferrer" class="hotline-card">
+                    <span class="hotline-icon">🌐</span>
+                    <div class="hotline-info">
+                        <strong>Situs Resmi BNN.go.id ↗</strong>
+                        <span>Portal Informasi dan Regulasi P4GN Nasional</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-wrapper">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="#beranda" class="logo">
+                        <div class="logo-blob"></div>
+                        SADAR
+                    </a>
+                    <p><strong>SADAR (Sarana Edukasi dan Deteksi Anti Narkoba)</strong> — Platform edukasi dan informasi
+                        pencegahan penyalahgunaan narkotika untuk pelajar dan masyarakat. Dibuat sebagai proyek
+                        pembelajaran PjBL kelas XI RPL.</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Navigasi</h4>
+                    <ul>
+                        <li><a href="#beranda">Beranda</a></li>
+                        <li><a href="#edukasi">Edukasi P4GN</a></li>
+                        <li><a href="#langkah">Langkah Pencegahan</a></li>
+                        <li><a href="#tanya-ai">Tanya Sahabat AI</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Fitur Interaktif</h4>
+                    <ul>
+                        <li><a href="#kuis">Kuis SADAR</a></li>
+                        <li><a href="#testimoni">Suara Komunitas</a></li>
+                        <li><a href="#bantuan">Hotlines Darurat</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Sumber Resmi</h4>
+                    <ul>
+                        <li><a href="https://bnn.go.id" target="_blank" rel="noopener noreferrer">Badan Narkotika
+                                Nasional (BNN)</a></li>
+                        <li><a href="https://kemkes.go.id" target="_blank" rel="noopener noreferrer">Kementerian
+                                Kesehatan RI</a></li>
+                        <li><a href="#">UU No. 35 Tahun 2009</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SADAR — Sarana Edukasi dan Deteksi Anti Narkoba. Team 5 (PjBL Kelas XI RPL).</p>
+                <p>Template dibangun di atas Tooplate & dipadukan dengan materi Editorial P4GN.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal Detail Artikel Edukasi -->
+    <div class="modal-overlay" id="modalArtikel" role="dialog" aria-modal="true" aria-labelledby="modalArticleTitle">
+        <div class="modal-content-card">
+            <button type="button" class="modal-close-btn" id="modalCloseBtn" aria-label="Tutup modal">✕</button>
+            <div class="modal-article-icon" id="modalArticleIcon">📚</div>
+            <h3 class="modal-article-title" id="modalArticleTitle">Judul Artikel</h3>
+            <span class="modal-article-source" id="modalArticleSource">Sumber</span>
+            <div class="modal-article-body" id="modalArticleBody"></div>
+        </div>
+    </div>
+
+    <!-- Modal Masuk (Login) -->
+    <div class="modal-overlay" id="modalLogin" role="dialog" aria-modal="true" aria-labelledby="modalLoginTitle">
+        <div class="modal-content-card auth-modal-card">
+            <button type="button" class="modal-close-btn" id="modalLoginClose" aria-label="Tutup modal">✕</button>
+            <div class="auth-modal-header">
+                <div class="auth-modal-icon">🔑</div>
+                <h3 class="auth-modal-title" id="modalLoginTitle">Masuk ke Akun SADAR</h3>
+                <p class="auth-modal-subtitle">Akses riwayat percakapan Sahabat AI dan konsultasimu yang tersimpan aman.
+                </p>
+            </div>
+
+            <div class="auth-alert error" id="loginAlertError" style="display: none;"></div>
+            <div class="auth-alert success" id="loginAlertSuccess" style="display: none;"></div>
+
+            <form id="formLogin" novalidate>
+                <div class="auth-form-group">
+                    <label class="auth-label" for="loginIdentifier">Username atau Email <span
+                            class="req">*</span></label>
+                    <div class="auth-input-wrapper">
+                        <span class="auth-input-icon">👤</span>
+                        <input type="text" class="auth-input" id="loginIdentifier"
+                            placeholder="Misal: pelajar_sadar atau pelajar@sadar.id" autocomplete="username" required>
+                    </div>
+                </div>
+
+                <div class="auth-form-group">
+                    <label class="auth-label" for="loginPassword">Kata Sandi <span class="req">*</span></label>
+                    <div class="auth-input-wrapper">
+                        <span class="auth-input-icon">🔒</span>
+                        <input type="password" class="auth-input" id="loginPassword"
+                            placeholder="Masukkan kata sandi..." autocomplete="current-password" required>
+                        <button type="button" class="auth-toggle-pwd" id="toggleLoginPwd"
+                            title="Tampilkan/Sembunyikan Sandi">👁️</button>
+                    </div>
+                </div>
+
+                <div class="auth-meta-row">
+                    <label class="auth-remember">
+                        <input type="checkbox" id="loginRemember" checked>
+                        <span>Ingat saya</span>
+                    </label>
+                    <span class="auth-demo-hint">Demo akun: <code>pelajar_sadar</code> / <code>pelajar123</code></span>
+                </div>
+
+                <button type="submit" class="btn-auth-submit" id="btnSubmitLogin">
+                    <span>🚀</span> Masuk Sekarang
+                </button>
+
+                <div class="auth-switch">
+                    Belum punya akun? <a href="#" id="linkSwitchToRegister">Daftar sekarang gratis ➜</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Daftar (Register) -->
+    <div class="modal-overlay" id="modalRegister" role="dialog" aria-modal="true" aria-labelledby="modalRegisterTitle">
+        <div class="modal-content-card auth-modal-card">
+            <button type="button" class="modal-close-btn" id="modalRegisterClose" aria-label="Tutup modal">✕</button>
+            <div class="auth-modal-header">
+                <div class="auth-modal-icon">✨</div>
+                <h3 class="auth-modal-title" id="modalRegisterTitle">Daftar Akun Baru</h3>
+                <p class="auth-modal-subtitle">Bergabunglah untuk menyimpan riwayat tanya-jawab AI dan materi pentingmu.
+                </p>
+            </div>
+
+            <div class="auth-alert error" id="regAlertError" style="display: none;"></div>
+            <div class="auth-alert success" id="regAlertSuccess" style="display: none;"></div>
+
+            <form id="formRegister" novalidate>
+                <div class="auth-form-group">
+                    <label class="auth-label" for="regName">Nama Lengkap <span class="req">*</span></label>
+                    <div class="auth-input-wrapper">
+                        <span class="auth-input-icon">🏷️</span>
+                        <input type="text" class="auth-input" id="regName" placeholder="Contoh: Muhammad Rizky"
+                            autocomplete="name" required>
+                    </div>
+                </div>
+
+                <div class="auth-form-group">
+                    <label class="auth-label" for="regUsername">Username <span class="req">*</span></label>
+                    <div class="auth-input-wrapper">
+                        <span class="auth-input-icon">@</span>
+                        <input type="text" class="auth-input" id="regUsername"
+                            placeholder="Contoh: rizky_rpl (min. 4 karakter)" autocomplete="username" required>
+                    </div>
+                </div>
+
+                <div class="auth-form-group">
+                    <label class="auth-label" for="regEmail">Alamat Email <span class="req">*</span></label>
+                    <div class="auth-input-wrapper">
+                        <span class="auth-input-icon">✉️</span>
+                        <input type="email" class="auth-input" id="regEmail" placeholder="Contoh: rizky@smk.sch.id"
+                            autocomplete="email" required>
+                    </div>
+                </div>
+
+                <div class="auth-form-row">
+                    <div class="auth-form-group" style="flex:1;">
+                        <label class="auth-label" for="regPassword">Kata Sandi <span class="req">*</span></label>
+                        <div class="auth-input-wrapper">
+                            <span class="auth-input-icon">🔒</span>
+                            <input type="password" class="auth-input" id="regPassword" placeholder="Min. 6 karakter"
+                                autocomplete="new-password" required>
+                            <button type="button" class="auth-toggle-pwd" id="toggleRegPwd"
+                                title="Tampilkan/Sembunyikan Sandi">👁️</button>
+                        </div>
+                    </div>
+
+                    <div class="auth-form-group" style="flex:1;">
+                        <label class="auth-label" for="regConfirmPassword">Ulangi Sandi <span
+                                class="req">*</span></label>
+                        <div class="auth-input-wrapper">
+                            <span class="auth-input-icon">🔑</span>
+                            <input type="password" class="auth-input" id="regConfirmPassword"
+                                placeholder="Konfirmasi sandi" autocomplete="new-password" required>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-auth-submit" id="btnSubmitRegister">
+                    <span>✨</span> Buat Akun SADAR
+                </button>
+
+                <div class="auth-switch">
+                    Sudah punya akun? <a href="#" id="linkSwitchToLogin">Masuk di sini ➜</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Pengaturan Gemini API Key -->
+    <div class="modal-overlay" id="modalApiKey" role="dialog" aria-modal="true" aria-labelledby="modalApiKeyTitle">
+        <div class="modal-content-card auth-modal-card">
+            <button type="button" class="modal-close-btn" id="modalApiKeyClose" aria-label="Tutup modal">✕</button>
+            <div class="auth-modal-header">
+                <div class="auth-modal-icon">🤖</div>
+                <h3 class="auth-modal-title" id="modalApiKeyTitle">Pengaturan Gemini AI</h3>
+                <p class="auth-modal-subtitle">Gunakan Google AI API Key milikmu sendiri agar bebas dari pemblokiran otomatis GitHub.</p>
+            </div>
+
+            <div class="auth-alert success" id="apiKeyAlertSuccess" style="display: none;"></div>
+
+            <form id="formApiKey" novalidate>
+                <div class="auth-form-group">
+                    <label class="auth-label" for="inputApiKey">Google Gemini API Key</label>
+                    <div class="auth-input-wrapper">
+                        <span class="auth-input-icon">🔑</span>
+                        <input type="password" class="auth-input" id="inputApiKey" placeholder="AIzaSy..." autocomplete="off">
+                        <button type="button" class="auth-toggle-pwd" id="toggleApiSecret">👁️</button>
+                    </div>
+                    <div style="font-size:0.8rem; color:#8B7878; margin-top:8px; line-height:1.45;">
+                        💡 Kunci ini disimpan aman di browser masing-masing (tidak akan bocor ke GitHub). Dapatkan kunci resmi gratis di <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" style="color:#D94B4B; font-weight:700;">Google AI Studio ↗</a>.
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:10px; margin-top:20px;">
+                    <button type="submit" class="btn-auth-submit" style="flex:1;">
+                        💾 Simpan Kunci
+                    </button>
+                    <button type="button" id="btnResetApiKey" class="btn btn-secondary" style="background:#FFF0F0; border-radius:50px; font-size:0.88rem; padding:10px 18px; border:none; cursor:pointer;">
+                        Hapus
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="sadar-toast" id="sadarToast" role="alert" aria-live="polite">
+        <span class="toast-icon" id="toastIcon">✨</span>
+        <span class="toast-msg" id="toastMsg">Notifikasi</span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="tooplate-mochi-script.js"></script>
+    <script src="sadar-db.js"></script>
+    <script src="sadar-logic.js"></script>
+</body>
+
+</html>
