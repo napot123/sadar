@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SADAR — Sarana Edukasi dan Deteksi Anti Narkoba</title>
+    <link rel="icon" href="data:,">
     <meta name="description"
         content="SADAR (Sarana Edukasi dan Deteksi Anti Narkoba) — Platform edukasi dan informasi pencegahan penyalahgunaan narkotika untuk pelajar dan masyarakat. Proyek PjBL kelas XI RPL.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -751,7 +752,11 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="config.js"></script>
+    <script>
+        if (location.hostname === '127.0.0.1' || location.hostname === 'localhost') {
+            document.write('<script src="config.js"><\/script>');
+        }
+    </script>
     <script src="tooplate-mochi-script.js"></script>
     <script src="sadar-logic.js"></script>
 </body>

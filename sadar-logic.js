@@ -894,7 +894,7 @@ Gunakan bahasa Indonesia yang santun, ramah, mudah dipahami remaja, beri emoji y
             const { data: { session } } = await supabase.auth.getSession();
             const token = (session && session.access_token) ? session.access_token : SUPABASE_ANON_KEY;
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(new Error('Request timeout')), 20000);
+            const timeoutId = setTimeout(() => controller.abort(new Error('Request timeout')), 45000);
 
             const res = await fetch(GEMINI_PROXY_URL, {
                 method: 'POST',

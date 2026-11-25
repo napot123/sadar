@@ -8,9 +8,10 @@ const corsHeaders = {
 };
 
 const CANDIDATE_MODELS = [
-  'gemini-2.5-flash-lite',
-  'gemini-2.5-flash',
-  'gemini-2.0-flash',
+  'gemini-3.5-flash-lite',
+  'gemini-3.1-flash-lite',
+  'gemini-3.8-flash',
+  'gemini-3-flash',
 ];
 
 serve(async (req) => {
@@ -38,32 +39,60 @@ serve(async (req) => {
     const payload = {
       ...(systemInstruction ? { system_instruction: { parts: [{ text: systemInstruction }] } } : {}),
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      generationConfig: { temperature: 0.7, maxOutputTokens: 800 },
+      generationConfig: { temperature: 0.7, maxOutputTokens: 1200 },
     };
+
+    let lastStatus = 0;
+    let lastError = '';
 
     for (const model of CANDIDATE_MODELS) {
       const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 12000);
 
-      if (res.ok) {
-        const data = await res.json();
-        const reply = data?.candidates?.[0]?.content?.parts?.map((p: { text?: string }) => p.text || '').join('\n');
-        if (reply) {
-          return new Response(JSON.stringify({ reply, model }), {
-            status: 200,
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          });
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          signal: controller.signal,
+        });
+        clearTimeout(timer);
+
+        if (res.ok) {
+          const data = await res.json();
+          const parts = data?.candidates?.[0]?.content?.parts || [];
+          const reply = parts
+            .filter((p: { thought?: boolean; text?: string }) => !p.thought && p.text)
+            .map((p: { text?: string }) => p.text)
+            .join('\n')
+            .trim();
+          if (reply) {
+            return new Response(JSON.stringify({ reply, model }), {
+              status: 200,
+              headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            });
+          }
+        } else {
+          lastStatus = res.status;
+          const errBody = await res.json().catch(() => ({}));
+          lastError = errBody?.error?.message || res.statusText || 'Unknown error';
+          if (res.status === 400 || res.status === 401 || res.status === 403) {
+            break;
+          }
         }
-      } else if (res.status === 401 || res.status === 403) {
-        break;
+      } catch (fetchErr) {
+        clearTimeout(timer);
+        lastStatus = 504;
+        lastError = fetchErr instanceof Error ? fetchErr.message : 'Timeout';
       }
     }
 
-    return new Response(JSON.stringify({ error: 'Semua model Gemini gagal merespons.' }), {
+    return new Response(JSON.stringify({
+      error: 'Semua model Gemini gagal merespons.',
+      googleStatus: lastStatus,
+      googleError: lastError,
+    }), {
       status: 502,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
