@@ -660,7 +660,12 @@
     // ==========================================
     // 2. TANYA SAHABAT AI (GEMINI AI INTEGRATION)
     // ==========================================
-    const GEMINI_API_KEY = 'AQ.Ab8RN6KEWcb7p_lm0E30qTQ37k_vexdIvobvTzM0bXi_PTPsuw';
+    // API key diambil dari config.js lokal (yang diabaikan .gitignore).
+    // Jika kosong (misal saat online di GitHub Pages), otomatis memakai Supabase Edge Function 'gemini-chat'.
+    const GEMINI_API_KEY = (window.SADAR_CONFIG && window.SADAR_CONFIG.GEMINI_API_KEY)
+        ? String(window.SADAR_CONFIG.GEMINI_API_KEY).trim()
+        : '';
+    const GEMINI_PROXY_URL = `${SUPABASE_URL}/functions/v1/gemini-chat`;
     
     const chatMessagesEl = document.getElementById('chatMessages');
     const chatInputEl = document.getElementById('chatInput');
@@ -883,7 +888,47 @@ Gunakan bahasa Indonesia yang santun, ramah, mudah dipahami remaja, beri emoji y
         return cachedModelQueue;
     }
 
+    async function callGeminiViaSupabaseProxy(userPrompt) {
+        if (!supabase) return null;
+        try {
+            const { data: { session } } = await supabase.auth.getSession();
+            const token = (session && session.access_token) ? session.access_token : SUPABASE_ANON_KEY;
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(new Error('Request timeout')), 20000);
+
+            const res = await fetch(GEMINI_PROXY_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': SUPABASE_ANON_KEY,
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    prompt: userPrompt,
+                    systemInstruction: SYSTEM_INSTRUCTION
+                }),
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+
+            if (res.ok) {
+                const data = await res.json();
+                if (data && data.reply) return data.reply;
+            }
+        } catch (e) {
+            console.warn('Supabase Edge Function gemini-chat tidak tersedia:', e.message);
+        }
+        return null;
+    }
+
     async function callGeminiAPI(userPrompt) {
+        // Jika GEMINI_API_KEY tidak diset di config.js lokal, gunakan Supabase Edge Function
+        if (!GEMINI_API_KEY) {
+            const proxyReply = await callGeminiViaSupabaseProxy(userPrompt);
+            if (proxyReply) return proxyReply;
+            return cariJawabanOffline(userPrompt);
+        }
+
         const allModels = await getAvailableModels();
 
         // Susun urutan rotasi: model yang sedang sehat diutamakan, model yang cooldown ditaruh paling akhir sebagai cadangan terakhir
