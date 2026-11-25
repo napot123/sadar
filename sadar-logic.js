@@ -660,7 +660,7 @@
     // ==========================================
     // 2. TANYA SAHABAT AI (GEMINI AI INTEGRATION)
     // ==========================================
-    const GEMINI_API_KEY = 'AQ.Ab8RN6LZyVcEpnvh_1lB_ubh60nMym92wzGBpTaXYzWzUTZuig';
+    const GEMINI_API_KEY = 'AQ.Ab8RN6KEWcb7p_lm0E30qTQ37k_vexdIvobvTzM0bXi_PTPsuw';
     
     const chatMessagesEl = document.getElementById('chatMessages');
     const chatInputEl = document.getElementById('chatInput');
