@@ -553,22 +553,27 @@
     function toggleMobileSidebar() {
         const sidebar = document.getElementById('chatSidebar');
         const backdrop = document.getElementById('chatSidebarBackdrop');
+        const btnToggle = document.getElementById('btnToggleSidebar');
         if (!sidebar) return;
         const isOpen = sidebar.classList.contains('open');
         if (isOpen) {
             sidebar.classList.remove('open');
             if (backdrop) backdrop.classList.remove('show');
+            if (btnToggle) btnToggle.setAttribute('aria-expanded', 'false');
         } else {
             sidebar.classList.add('open');
             if (backdrop) backdrop.classList.add('show');
+            if (btnToggle) btnToggle.setAttribute('aria-expanded', 'true');
         }
     }
 
     function closeMobileSidebar() {
         const sidebar = document.getElementById('chatSidebar');
         const backdrop = document.getElementById('chatSidebarBackdrop');
+        const btnToggle = document.getElementById('btnToggleSidebar');
         if (sidebar) sidebar.classList.remove('open');
         if (backdrop) backdrop.classList.remove('show');
+        if (btnToggle) btnToggle.setAttribute('aria-expanded', 'false');
     }
 
     function showToast(message, icon = '✓') {
@@ -1082,29 +1087,149 @@ Gunakan bahasa Indonesia yang santun, ramah, mudah dipahami remaja, beri emoji y
     const btnNewChat = document.getElementById('btnNewChat');
     const btnNewChatTop = document.getElementById('btnNewChatTop');
     const btnToggleSidebar = document.getElementById('btnToggleSidebar');
+    const btnCloseSidebar = document.getElementById('btnCloseSidebar');
     const chatSidebarBackdrop = document.getElementById('chatSidebarBackdrop');
 
     if (btnNewChat) btnNewChat.addEventListener('click', buatChatBaru);
     if (btnNewChatTop) btnNewChatTop.addEventListener('click', buatChatBaru);
-    if (btnToggleSidebar) btnToggleSidebar.addEventListener('click', toggleMobileSidebar);
+    if (btnToggleSidebar) {
+        btnToggleSidebar.setAttribute('aria-expanded', 'false');
+        btnToggleSidebar.addEventListener('click', toggleMobileSidebar);
+    }
+    if (btnCloseSidebar) btnCloseSidebar.addEventListener('click', closeMobileSidebar);
     if (chatSidebarBackdrop) chatSidebarBackdrop.addEventListener('click', closeMobileSidebar);
 
-    // Fitur Layar Penuh (Fullscreen) Kotak Chat AI
+    // Fitur Layar Penuh (Fullscreen) Kotak Chat AI & Penanganan Keyboard Virtual HP
     const chatContainer = document.getElementById('chatContainer');
     const btnFullscreenChat = document.getElementById('btnFullscreenChat');
+
+    let lastViewportWidth = window.innerWidth;
+    let baseViewportHeight = window.innerHeight;
+    let keyboardBlurTimer = null;
+
+    function updateViewportBaseline() {
+        const currentWidth = window.innerWidth;
+        if (Math.abs(currentWidth - lastViewportWidth) > 20) {
+            lastViewportWidth = currentWidth;
+            baseViewportHeight = window.innerHeight;
+        } else if (window.innerHeight > baseViewportHeight) {
+            baseViewportHeight = window.innerHeight;
+        }
+    }
+
+    function clearFullscreenInlineViewport() {
+        if (!chatContainer) return;
+        chatContainer.style.removeProperty('top');
+        chatContainer.style.removeProperty('height');
+        chatContainer.style.removeProperty('max-height');
+        chatContainer.style.removeProperty('bottom');
+    }
+
+    function ensureChatInputVisible(immediate) {
+        if (!chatInputEl || !chatContainer || chatContainer.classList.contains('is-fullscreen')) return;
+        if (window.innerWidth > 768) return;
+        const vv = window.visualViewport;
+        const vvTop = vv ? vv.offsetTop : 0;
+        const vvHeight = vv ? vv.height : window.innerHeight;
+        const vvBottom = vvTop + vvHeight;
+        const inputBar = chatInputEl.closest('.chat-input-bar') || chatInputEl;
+        const barRect = inputBar.getBoundingClientRect();
+
+        if (barRect.bottom > vvBottom - 12) {
+            window.scrollBy({
+                top: barRect.bottom - vvBottom + 16,
+                behavior: immediate ? 'auto' : 'smooth'
+            });
+        } else if (barRect.top < vvTop + 68) {
+            window.scrollBy({
+                top: barRect.top - (vvTop + 76),
+                behavior: immediate ? 'auto' : 'smooth'
+            });
+        }
+    }
+
+    function syncChatViewportForKeyboard(immediate) {
+        if (!chatContainer) return;
+        updateViewportBaseline();
+        const vv = window.visualViewport;
+        const vvHeight = vv ? vv.height : window.innerHeight;
+        const vvOffsetTop = vv ? vv.offsetTop : 0;
+        const isMobile = window.innerWidth <= 768;
+        const keyboardOpen = isMobile && (
+            vvHeight < baseViewportHeight * 0.78 ||
+            (document.activeElement === chatInputEl && vvHeight < 520)
+        );
+
+        if (chatContainer.classList.contains('is-fullscreen')) {
+            chatContainer.classList.toggle('keyboard-open', keyboardOpen);
+            if (vv && (Math.abs(vvHeight - window.innerHeight) > 2 || Math.abs(vvOffsetTop) > 2 || keyboardOpen)) {
+                chatContainer.style.setProperty('top', vvOffsetTop + 'px', 'important');
+                chatContainer.style.setProperty('height', vvHeight + 'px', 'important');
+                chatContainer.style.setProperty('max-height', vvHeight + 'px', 'important');
+                chatContainer.style.setProperty('bottom', 'auto', 'important');
+            } else {
+                clearFullscreenInlineViewport();
+            }
+            if (keyboardOpen && chatMessagesEl) {
+                chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+            }
+        } else {
+            chatContainer.classList.remove('keyboard-open');
+            clearFullscreenInlineViewport();
+            if (document.activeElement === chatInputEl) {
+                ensureChatInputVisible(immediate);
+            }
+        }
+    }
+
+    if (chatInputEl) {
+        chatInputEl.addEventListener('focus', () => {
+            clearTimeout(keyboardBlurTimer);
+            if (window.innerWidth <= 767) {
+                closeMobileSidebar();
+            }
+            syncChatViewportForKeyboard(false);
+            setTimeout(() => syncChatViewportForKeyboard(false), 140);
+            setTimeout(() => syncChatViewportForKeyboard(false), 340);
+        });
+
+        chatInputEl.addEventListener('blur', () => {
+            clearTimeout(keyboardBlurTimer);
+            keyboardBlurTimer = setTimeout(() => {
+                if (document.activeElement !== chatInputEl) {
+                    syncChatViewportForKeyboard(true);
+                }
+            }, 160);
+        });
+    }
+
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', () => syncChatViewportForKeyboard(true));
+        window.visualViewport.addEventListener('scroll', () => {
+            if (chatContainer && chatContainer.classList.contains('is-fullscreen')) {
+                syncChatViewportForKeyboard(true);
+            }
+        });
+    }
+    window.addEventListener('resize', () => syncChatViewportForKeyboard(true));
 
     function toggleFullscreenChat() {
         if (!chatContainer) return;
         const isFs = chatContainer.classList.toggle('is-fullscreen');
 
         if (isFs) {
+            document.documentElement.style.overflow = 'hidden';
             document.body.style.overflow = 'hidden';
             if (btnFullscreenChat) {
                 btnFullscreenChat.innerHTML = '<span class="fs-icon">🗗</span> <span class="fs-text">Perkecil</span>';
                 btnFullscreenChat.title = 'Keluar dari Layar Penuh (Esc)';
             }
+            syncChatViewportForKeyboard(true);
         } else {
+            document.documentElement.style.overflow = '';
             document.body.style.overflow = '';
+            chatContainer.classList.remove('keyboard-open');
+            clearFullscreenInlineViewport();
             if (btnFullscreenChat) {
                 btnFullscreenChat.innerHTML = '<span class="fs-icon">⛶</span> <span class="fs-text">Layar Penuh</span>';
                 btnFullscreenChat.title = 'Perbesar Layar Penuh';
@@ -1116,10 +1241,17 @@ Gunakan bahasa Indonesia yang santun, ramah, mudah dipahami remaja, beri emoji y
         btnFullscreenChat.addEventListener('click', toggleFullscreenChat);
     }
 
-    // Tombol ESC di keyboard untuk keluar dari mode fullscreen
+    // Tombol ESC di keyboard untuk keluar dari mode fullscreen atau menutup sidebar
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && chatContainer && chatContainer.classList.contains('is-fullscreen')) {
-            toggleFullscreenChat();
+        if (e.key === 'Escape') {
+            const sidebar = document.getElementById('chatSidebar');
+            if (sidebar && sidebar.classList.contains('open')) {
+                closeMobileSidebar();
+                return;
+            }
+            if (chatContainer && chatContainer.classList.contains('is-fullscreen')) {
+                toggleFullscreenChat();
+            }
         }
     });
 
